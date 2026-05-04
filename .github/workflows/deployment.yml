@@ -75,5 +75,5 @@ jobs:
           key: ${{ secrets.SSH_VM_KEY }}
           script: |
              cd ~/projects/conduit-container
-             docker compose up -d
+             docker compose up -d --force-recreate
 
