@@ -1,0 +1,79 @@
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  # lint-backend:
+  #   name: Lint backend code
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v4
+  #     - name: Install Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: ${{ vars.PY_VERSION }}
+  #     - name: Install Ruff
+  #       run: pip install ruff 
+  #     - name: Lint backend code
+  #       run: ruff check .
+  #       working-directory: conduit-backend
+
+  # lint-frontend:
+  #   name: Lint frontend code
+  #   runs-on: ubuntu-latest
+  #   # defaults:
+  #   #   run:
+  #   #     working-directory: conduit-frontend   
+  #   steps: 
+  #     - name: checkout
+  #       uses: actions/checkout@v4 
+  #       with:
+  #           submodules: recursive
+  #           fetch-depth: 0
+  #     - name: List repo contents
+  #       run: |
+  #         cd conduit-frontend
+  #         ls -a
+
+  #     - name: Install Node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ vars.NODE_VERSION }} 
+  #         working-directory: conduit-frontend
+  #     - name: Install Node dependencies 
+  #       working-directory: conduit-frontend   
+  #       run: npm ci
+
+  #     - name: Lint frontend code
+  #       working-directory: conduit-frontend   
+  #       run: npm run lint
+        
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PY_VERSION: ${{ vars.PY_VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+        with: 
+          submodules: recursive
+      - name: Build Docker images
+        run: docker compose build
+
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: ${{ vars.NODE_VERSION }}
+    steps: 
+      - name: Deploy application
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_VM_KEY }}
+          script: |
+             cd ~/projects/conduit-container
+             docker compose up -d
+  
