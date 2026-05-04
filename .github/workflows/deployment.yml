@@ -71,7 +71,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ vars.SSH_HOST }}
-          # username: ${{ vars.SSH_USER }}
+          username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_VM_KEY }}
           script: |
              cd ~/projects/conduit-container
