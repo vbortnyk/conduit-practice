@@ -76,4 +76,4 @@ jobs:
           script: |
              cd ~/projects/conduit-container
              docker compose up -d
-  
+
