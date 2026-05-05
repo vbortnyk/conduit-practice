@@ -130,9 +130,6 @@ jobs:
 
   build-and-push:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
     steps:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -140,13 +137,11 @@ jobs:
           ssh-private-key: ${{ secrets.GH_SSH_KEY }}
       - name: Add GitHub to known hosts
         run: ssh-keyscan github.com >> ~/.ssh/known_hosts
-      - name: Force SSH for GitHub
-        run: |
-          git config --global url."git@github.com:".insteadOf "https://github.com/"
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
+          ssh-key: ${{ secrets.GH_SSH_KEY }}
       - name: Login to GHCR
         uses: docker/login-action@v4
         with: 
