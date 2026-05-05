@@ -51,7 +51,6 @@ jobs:
   #       working-directory: conduit-frontend   
   #       run: npm run lint
 
-
   detect-frontend-changes: 
     runs-on: ubuntu-latest
     outputs:
@@ -65,7 +64,7 @@ jobs:
       - name: Check submodule changes
         id: check
         run: |
-          if git diff ${{ github.event.before }} ${{ github.sha }}
+          if git diff ${{ github.event.before }} ${{ github.sha }}; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -84,7 +83,7 @@ jobs:
       - name: Check submodule changes
         id: check
         run: |
-          if git diff ${{ github.event.before }} ${{ github.sha }}
+          if git diff ${{ github.event.before }} ${{ github.sha }}; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
