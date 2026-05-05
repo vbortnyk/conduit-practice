@@ -162,6 +162,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build-and-push
+
     # needs: [build-backend, build-frontend]
     env:
       NODE_VERSION: ${{ vars.NODE_VERSION }}
