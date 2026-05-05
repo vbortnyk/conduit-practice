@@ -134,6 +134,18 @@ jobs:
     env:
       NODE_VERSION: ${{ vars.NODE_VERSION }}
     steps: 
+      - name: Dump all contexts
+        run: |
+          echo "GITHUB:"
+          echo '${{ toJson(github) }}' | jq
+          echo "ENV:"
+          echo '${{ toJson(env) }}' | jq
+          echo "JOB:"
+          echo '${{ toJson(job) }}' | jq
+          echo "STEPS:"
+          echo '${{ toJson(steps) }}' | jq
+          echo "RUNNER:"
+          echo '${{ toJson(runner) }}' | jq
       - name: Deploy application
         uses: appleboy/ssh-action@v1
         with:
