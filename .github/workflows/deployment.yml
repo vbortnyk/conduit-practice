@@ -189,30 +189,3 @@ jobs:
         run: |
           docker pull ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
           docker run -d ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
-          
-          
-
-
-
-
-
-
-
-          
-
-          # script: |
-          #   if [ "${{ steps.detect-backend-changes.changed }}" = "true" ] && [ "${{ steps.changes.outputs.frontend }}" = "true" ];    then
-          #   docker compose up -d --build
-          #   elif [ "${{ steps.changes.outputs.backend }}" = "true" ]; then
-          #   docker compose up -d backend --build
-          #   elif [ "${{ steps.changes.outputs.frontend }}" = "true" ]; then
-          #   docker compose up -d frontend --build
-          #   fi
-
-
-
-          # script: |
-          #    cd ~/projects/conduit-container
-          #    docker compose up -d --force-recreate
-
-
