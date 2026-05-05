@@ -50,6 +50,44 @@ jobs:
   #     - name: Lint frontend code
   #       working-directory: conduit-frontend   
   #       run: npm run lint
+  detect-frontend-changes: 
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        # with:
+        #   submodules: true
+        #   fetch-depth: 0
+
+      - name: Check submodule changes
+        id: check
+        run: |
+          if git diff ${{ github.event.before }} ${{ github.sha }}; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  detect-backend-changes: 
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        # with:
+        #   submodules: true
+        #   fetch-depth: 0
+
+      - name: Check submodule changes
+        id: check
+        run: |
+          if git diff ${{ github.event.before }} ${{ github.sha }}; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
         
   build:
     runs-on: ubuntu-latest
