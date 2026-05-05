@@ -145,28 +145,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      
-      - name: Remove submodule git metadata
-        run: |
-         rm -rf .git/modules
-         find . -name ".git" -type f -delete
-         find . -name ".git" -type d -exec rm -rf {} +
 
-      - name: Verify cleanup
-        run: |
-         find . -name ".git"
-         
       - name: Login to GHCR
         uses: docker/login-action@v4
         with: 
           registry: ghcr.io
           username: ${{ vars.GH_USERNAME }}
-          password: ${{ secrets.GH_TOKEN }}
-
-      - name: Verify submodules exist
-        run: |
-          ls -la
-          ls -la conduit-backend || true    
+          password: ${{ secrets.GH_TOKEN }}   
       
       - name: Build and push
         uses: docker/build-push-action@v7
