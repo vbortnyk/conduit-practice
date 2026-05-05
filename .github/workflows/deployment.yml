@@ -158,6 +158,7 @@ jobs:
         with:
           push: true
           tags: ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+          ssh: default
 
   deploy:
     runs-on: ubuntu-latest
