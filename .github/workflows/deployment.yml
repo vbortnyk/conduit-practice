@@ -156,6 +156,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
+          context: ./conduit-backend
           push: true
           tags: ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
 
