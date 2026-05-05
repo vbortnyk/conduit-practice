@@ -51,94 +51,86 @@ jobs:
   #       working-directory: conduit-frontend   
   #       run: npm run lint
 
-  detect-frontend-changes: 
-    runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.check.outputs.changed }}
-    steps:
-      - uses: actions/checkout@v4
-        # with:
-        #   submodules: true
-        #   fetch-depth: 0
+  # detect-frontend-changes: 
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     changed: ${{ steps.check.outputs.changed }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Detect frontend changes
+  #       id: check
+  #       run: |
+  #         if git diff ${{ github.event.before }} ${{ github.sha }}; then
+  #           echo "changed=true" >> $GITHUB_OUTPUT
+  #         else
+  #           echo "changed=false" >> $GITHUB_OUTPUT
+  #         fi
 
-      - name: Check submodule changes
-        id: check
-        run: |
-          if git diff ${{ github.event.before }} ${{ github.sha }}; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
-
-  detect-backend-changes: 
-    runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.check.outputs.changed }}
-    steps:
-      - uses: actions/checkout@v4
-        # with:
-        #   submodules: true
-        #   fetch-depth: 0
-
-      - name: Check submodule changes
-        id: check
-        run: |
-          if git diff ${{ github.event.before }} ${{ github.sha }}; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+  # detect-backend-changes: 
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     changed: ${{ steps.check.outputs.changed }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Detect backend changes
+  #       id: check
+  #       run: |
+  #         if git diff ${{ github.event.before }} ${{ github.sha }}; then
+  #           echo "changed=true" >> $GITHUB_OUTPUT
+  #         else
+  #           echo "changed=false" >> $GITHUB_OUTPUT
+  #         fi
         
-  build-frontend:
-    needs: detect-frontend-changes
-    runs-on: ubuntu-latest
-    outputs:
-      rebuilt: ${{ needs.detect-frontend-changes.outputs.changed }}
-    steps:
-      - name: Build frontend
-        id: required
-        if: needs.detect-frontend-changes.outputs.changed == 'true'
-        run: echo "reubild=true" >> $GITHUB_OUTPUT
-      - name: Build frontend
-        if: needs.detect-frontend-changes.outputs.changed == 'false'
-        run: echo "rebuid=false" >> $GITHUB_OUTPUT
+  # build-frontend:
+  #   needs: detect-frontend-changes
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     rebuilt: ${{ needs.detect-frontend-changes.outputs.changed }}
+  #   steps:
+  #     - name: Build frontend
+  #       id: required
+  #       if: needs.detect-frontend-changes.outputs.changed == 'true'
+  #       run: echo "reubild=true" >> $GITHUB_OUTPUT
+  #     - name: Build frontend
+  #       if: needs.detect-frontend-changes.outputs.changed == 'false'
+  #       run: echo "rebuid=false" >> $GITHUB_OUTPUT
         
-        env:
-            PY_VERSION: ${{ vars.NODE_VERSION }}
-      - uses: actions/checkout@v4
-        with: 
-          submodules: recursive
-      - name: Build Docker images
-        run: |
-          cd conduit-frontend
-          docker compose build 
+  #       env:
+  #           PY_VERSION: ${{ vars.NODE_VERSION }}
+  #     - uses: actions/checkout@v4
+  #       with: 
+  #         submodules: recursive
+  #     - name: Build Docker images
+  #       run: |
+  #         cd conduit-frontend
+  #         docker compose build 
       
     
 
-  build-backend:
-    needs: detect-backend-changes
-    runs-on: ubuntu-latest
-    if: needs.detect-backend-changes.outputs.changed == 'true'
-    steps:
-      - name: Check backend build required
-        if: needs.detect-backend-changes.outputs.changed == 'true'
-        run: echo 'Build required TRUE'
-      - name: Checkout backend
-        run: echo "building..."
-        env:
-            PY_VERSION: ${{ vars.PY_VERSION }}
-      - uses: actions/checkout@v4
-        # with: 
-        #   submodules: recursive
-      - name: Build backend Docker image
-        run: |
-          cd ./conduit-backend
-          docker compose build
-          echo "backend-rebuilt=true" >> $GITHUB_OUTPUT
+  # build-backend:
+  #   needs: detect-backend-changes
+  #   runs-on: ubuntu-latest
+  #   if: needs.detect-backend-changes.outputs.changed == 'true'
+  #   steps:
+  #     - name: Check backend build required
+  #       if: needs.detect-backend-changes.outputs.changed == 'true'
+  #       run: echo 'Build required TRUE'
+  #     - name: Checkout backend
+  #       run: echo "building..."
+  #       env:
+  #           PY_VERSION: ${{ vars.PY_VERSION }}
+  #     - uses: actions/checkout@v4
+  #       # with: 
+  #       #   submodules: recursive
+  #     - name: Build backend Docker image
+  #       run: |
+  #         cd ./conduit-backend
+  #         docker compose build
+  #         echo "backend-rebuilt=true" >> $GITHUB_OUTPUT
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build-backend, build-frontend]
+    # needs: [build-backend, build-frontend]
     env:
       NODE_VERSION: ${{ vars.NODE_VERSION }}
     steps: 
