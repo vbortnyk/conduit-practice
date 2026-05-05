@@ -154,6 +154,11 @@ jobs:
           username: ${{ vars.GH_USERNAME }}
           password: ${{ secrets.GH_TOKEN }}
 
+      - name: Verify submodules exist
+        run: |
+          ls -la
+          ls -la conduit-backend || true    
+      
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
