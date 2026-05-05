@@ -130,7 +130,16 @@ jobs:
 
   build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.GH_SSH_KEY }}
+      - name: Add GitHub to known hosts
+        run: ssh-keyscan github.com >> ~/.ssh/known_hosts
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Login to GHCR
@@ -138,7 +147,7 @@ jobs:
         with: 
           registry: ghcr.io
           username: ${{ vars.GH_USERNAME }}
-          password: ${{ secrets.GH_TOCKEN }}
+          password: ${{ secrets.GH_TOKEN }}
       - name: Build and push to GHCR
         uses: docker/build-push-action@v7
         with:
@@ -151,7 +160,6 @@ jobs:
     env:
       NODE_VERSION: ${{ vars.NODE_VERSION }}
     steps: 
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -161,7 +169,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ vars.GH_USERNAME }}
-          password: ${{ secrets.GH_TOCKEN }}
+          password: ${{ secrets.GH_TOKEN }}
           scope: 'myorg/myimage@push'
       
       - name: Login to VM 
