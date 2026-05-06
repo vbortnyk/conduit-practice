@@ -2,132 +2,8 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  # lint-backend:
-  #   name: Lint backend code
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v4
-  #     - name: Install Python
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: ${{ vars.PY_VERSION }}
-  #     - name: Install Ruff
-  #       run: pip install ruff 
-  #     - name: Lint backend code
-  #       run: ruff check .
-  #       working-directory: conduit-backend
-
-  # lint-frontend:
-  #   name: Lint frontend code
-  #   runs-on: ubuntu-latest
-  #   # defaults:
-  #   #   run:
-  #   #     working-directory: conduit-frontend   
-  #   steps: 
-  #     - name: checkout
-  #       uses: actions/checkout@v4 
-  #       with:
-  #           submodules: recursive
-  #           fetch-depth: 0
-  #     - name: List repo contents
-  #       run: |
-  #         cd conduit-frontend
-  #         ls -a
-
-  #     - name: Install Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ vars.NODE_VERSION }} 
-  #         working-directory: conduit-frontend
-  #     - name: Install Node dependencies 
-  #       working-directory: conduit-frontend   
-  #       run: npm ci
-
-  #     - name: Lint frontend code
-  #       working-directory: conduit-frontend   
-  #       run: npm run lint
-
-  # detect-frontend-changes: 
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     changed: ${{ steps.check.outputs.changed }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Detect frontend changes
-  #       id: check
-  #       run: |
-  #         if git diff ${{ github.event.before }} ${{ github.sha }}; then
-  #           echo "changed=true" >> $GITHUB_OUTPUT
-  #         else
-  #           echo "changed=false" >> $GITHUB_OUTPUT
-  #         fi
-
-  # detect-backend-changes: 
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     changed: ${{ steps.check.outputs.changed }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Detect backend changes
-  #       id: check
-  #       run: |
-  #         if git diff ${{ github.event.before }} ${{ github.sha }}; then
-  #           echo "changed=true" >> $GITHUB_OUTPUT
-  #         else
-  #           echo "changed=false" >> $GITHUB_OUTPUT
-  #         fi
-        
-  # build-frontend:
-  #   needs: detect-frontend-changes
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     rebuilt: ${{ needs.detect-frontend-changes.outputs.changed }}
-  #   steps:
-  #     - name: Build frontend
-  #       id: required
-  #       if: needs.detect-frontend-changes.outputs.changed == 'true'
-  #       run: echo "reubild=true" >> $GITHUB_OUTPUT
-  #     - name: Build frontend
-  #       if: needs.detect-frontend-changes.outputs.changed == 'false'
-  #       run: echo "rebuid=false" >> $GITHUB_OUTPUT
-        
-  #       env:
-  #           PY_VERSION: ${{ vars.NODE_VERSION }}
-  #     - uses: actions/checkout@v4
-  #       with: 
-  #         submodules: recursive
-  #     - name: Build Docker images
-  #       run: |
-  #         cd conduit-frontend
-  #         docker compose build 
-      
-    
-
-  # build-backend:
-  #   needs: detect-backend-changes
-  #   runs-on: ubuntu-latest
-  #   if: needs.detect-backend-changes.outputs.changed == 'true'
-  #   steps:
-  #     - name: Check backend build required
-  #       if: needs.detect-backend-changes.outputs.changed == 'true'
-  #       run: echo 'Build required TRUE'
-  #     - name: Checkout backend
-  #       run: echo "building..."
-  #       env:
-  #           PY_VERSION: ${{ vars.PY_VERSION }}
-  #     - uses: actions/checkout@v4
-  #       # with: 
-  #       #   submodules: recursive
-  #     - name: Build backend Docker image
-  #       run: |
-  #         cd ./conduit-backend
-  #         docker compose build
-  #         echo "backend-rebuilt=true" >> $GITHUB_OUTPUT
-
   build-and-push:
     runs-on: ubuntu-latest
     steps:
@@ -173,6 +49,7 @@ jobs:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_VM_KEY }}
-          script: |
-            docker pull ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
-            docker run -d ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+          script: 
+            docker compose up -d
+            # docker pull ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest     # ${{ vars.IMAGE_TAG }}
+            # docker run -d ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest   # ${{ vars.IMAGE_TAG }}
