@@ -161,36 +161,15 @@ jobs:
           tags: ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
 
   deploy:
-    permissions:
-      contents: read
-      packages: read
     runs-on: ubuntu-latest
     needs: build-and-push
-
-    # needs: [build-backend, build-frontend]
-    env:
-      NODE_VERSION: ${{ vars.NODE_VERSION }}
     steps: 
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Login to GHCR
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ vars.GH_USERNAME }}
-          password: ${{ secrets.GH_TOKEN }}
-          scope: 'myorg/myimage@push'
-      
       - name: Login to VM 
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_VM_KEY }}
-
-      - name: Pull image from GHCR and run
-        run: |
-          docker pull ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
-          docker run -d ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+          script: |
+            docker pull ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
+            docker run -d ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest
