@@ -49,7 +49,9 @@ jobs:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_VM_KEY }}
-          script: 
+          script:
+            git pull
+           git submodule update --init --recursive
             docker compose up -d
             # docker pull ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest     # ${{ vars.IMAGE_TAG }}
             # docker run -d ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.IMAGE_NAME }}:latest   # ${{ vars.IMAGE_TAG }}
