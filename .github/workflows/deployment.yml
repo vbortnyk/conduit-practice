@@ -27,7 +27,7 @@ jobs:
 
           if [ "$EVENT" = "push" ]; then
             echo "Deploying Conduit"
-            cd conduit-container-practice
+            cd conduit-practice
             docker compose up -d
           fi
 
