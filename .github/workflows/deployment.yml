@@ -26,10 +26,11 @@ jobs:
           EVENT="${{ github.event_name }}"
 
           if [ "$EVENT" = "push" ]; then
-            echo "Deploing Conduit"
+            echo "Deploying Conduit"
             docker compose up -d
+          fi
 
-          else 
+          if 
             EVENT="${{ github.event.workflow_run.name }}"
             SHA="${{ github.event.workflow_run.head_sha }}"
               
