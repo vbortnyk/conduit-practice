@@ -23,7 +23,7 @@ jobs:
       - name: Deploy
         run: |
           echo "Detecting event type"
-          EVENT="${{ github.event }}"
+          EVENT="${{ github.event_name }}"
 
           if [ "$EVENT" = "push" ]; then
             echo "Deploing Conduit"
