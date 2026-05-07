@@ -31,7 +31,7 @@ jobs:
 
           else 
             EVENT=${{ github.event.workflow_run.name }}
-            SHA="${{ github.event.workflow_run.head_sha }}"
+            SHA=${{ github.event.workflow_run.head_sha }}
               
             if [ -z "$SHA" ]; then
               echo "Broken SHA. Exiting..."
