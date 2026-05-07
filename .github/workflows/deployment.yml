@@ -39,16 +39,16 @@ jobs:
               exit 1
 
             elseif [ "$EVENT" = "Build and push Conduit backend" ]; then
-              IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ BACKEND_IMAGE_NAME }}:$SHA"
+              IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
               git pull $IMAGE
-              docker rm -f ${{ BACKEND_IMAGE_NAME }} || true
-              docker compose run ${{ BACKEND_IMAGE_NAME }}
+              docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
+              docker compose run ${{ vars.BACKEND_IMAGE_NAME }}
 
             elseif [ "$WORKFLOW" = "Build and push Conduit frontend" ]; then
-              IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ FRONTEND_IMAGE_NAME }}:$SHA"
+              IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.FRONTEND_IMAGE_NAME }}:$SHA"
               git pull $IMAGE
-              docker rm -f ${{ FRONTEND_IMAGE_NAME }} || true
-              docker compose run ${{ FTONTEND_IMAGE_NAME }}
+              docker rm -f ${{ vars.FRONTEND_IMAGE_NAME }} || true
+              docker compose run ${{ vars.FRONTEND_IMAGE_NAME }}
 
             else
               echo "Unsupportet event: $EVENT
