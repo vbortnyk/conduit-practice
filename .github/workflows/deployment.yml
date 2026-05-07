@@ -4,15 +4,14 @@ on:
   workflow_run:
     workflows:
       - Build and push Conduit backened
-      - Build and push Conduit frontend
-     
+      - Build and push Conduit frontend    
   push:
     branches:
       - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-lstest
+    runs-on: ubuntu-latest
     steps:
       - name: Login to VM 
         uses: appleboy/ssh-action@v1
@@ -26,7 +25,7 @@ jobs:
           echo "Detecting event type"
           EVENT="${{ github.event }}"
 
-          if [ "$EVENT" = "push"]; then
+          if [ "$EVENT" = "push" ]; then
             echo "Deploing Conduit"
             docker compose up -d
 
@@ -34,19 +33,19 @@ jobs:
             EVENT=${{ github.event.workflow_run.name }}
             SHA="${{ github.event.workflow_run.head_sha }}"
               
-            if [ -z $SHA ]; then
+            if [ -z "$SHA" ]; then
               echo "Broken SHA. Exiting..."
               exit 1
 
-            elseif [ "$EVENT" = "Build and push Conduit backend" ]; then
+            elif [ "$EVENT" = "Build and push Conduit backend" ]; then
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
-              git pull $IMAGE
+              git pull "$IMAGE"
               docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
               docker compose run ${{ vars.BACKEND_IMAGE_NAME }}
 
-            elseif [ "$WORKFLOW" = "Build and push Conduit frontend" ]; then
+            elif [ "$EVENT" = "Build and push Conduit frontend" ]; then
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.FRONTEND_IMAGE_NAME }}:$SHA"
-              git pull $IMAGE
+              git pull "$IMAGE"
               docker rm -f ${{ vars.FRONTEND_IMAGE_NAME }} || true
               docker compose run ${{ vars.FRONTEND_IMAGE_NAME }}
 
