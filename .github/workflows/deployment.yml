@@ -39,8 +39,7 @@ jobs:
           fi
 
       - name: Deploy separate services
-        run: |
-          if 
+        run: |          
             EVENT="${{ github.event.workflow_run.name }}"
             SHA="${{ github.event.workflow_run.head_sha }}"
               
@@ -64,4 +63,3 @@ jobs:
             else
               echo "Unsupportet event: $EVENT
             fi
-          fi
