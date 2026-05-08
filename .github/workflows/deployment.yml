@@ -4,7 +4,8 @@ on:
   workflow_run:
     workflows:
       - Build and push Conduit backened
-      - Build and push Conduit frontend    
+      - Build and push Conduit frontend 
+    types: [completed]   
   push:
     branches:
       - main
@@ -22,7 +23,7 @@ jobs:
           registry: ghcr.io
           username: ${{ vars.GH_USERNAME }}
           password: ${{ secrets.GH_PAT }} 
-          
+
       - name: Deploy
         run: |
           EVENT="${{ github.event_name }}"
