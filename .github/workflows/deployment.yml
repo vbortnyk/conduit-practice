@@ -25,6 +25,7 @@ jobs:
           echo "Detecting event type"
           EVENT="${{ github.event_name }}"
           pwd
+          ls -la
           if [ "$EVENT" = "push" ]; then
             echo "Building Conduit and pushing to GHCR"
             docker compose build
