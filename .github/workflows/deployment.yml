@@ -24,10 +24,10 @@ jobs:
         run: |
           echo "Detecting event type"
           EVENT="${{ github.event_name }}"
-
+          pwd
           if [ "$EVENT" = "push" ]; then
             echo "Deploying Conduit"
-            cd conduit-practice
+            cd projects/conduit-practice
             docker compose up -d
           fi
 
@@ -39,13 +39,13 @@ jobs:
               echo "Broken SHA. Exiting..."
               exit 1
 
-            elif [ "$EVENT" = "Build and push Conduit backend" ]; then
+            elif [ "$EVENT" = "Deploying Conduit backend" ]; then
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
               git pull "$IMAGE"
               docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
               docker compose run ${{ vars.BACKEND_IMAGE_NAME }}
 
-            elif [ "$EVENT" = "Build and push Conduit frontend" ]; then
+            elif [ "$EVENT" = "Deploying Conduit frontend" ]; then
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.FRONTEND_IMAGE_NAME }}:$SHA"
               git pull "$IMAGE"
               docker rm -f ${{ vars.FRONTEND_IMAGE_NAME }} || true
