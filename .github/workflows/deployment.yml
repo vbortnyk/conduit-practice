@@ -13,54 +13,43 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Login to VM 
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
-          key: ${{ secrets.SSH_VM_KEY }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy all
+      - name: Deploy
         run: |
-          echo "Detecting event type"
           EVENT="${{ github.event_name }}"
-          pwd
-          ls -la
-          if [ "$EVENT" = "push" ]; then
-            echo "Building Conduit and pushing to GHCR"
-            git submodule update --init --recursive
+          if [ "$EVENT" = "push" ]; then 
+            echo "Full build and deploy
+            git submodule update --init --recursive 
             docker compose build
             docker compose push
+
+            exit 0
           else
             echo "Full deploy not needed"
           fi
-
-      - name: Deploy separate services
-        run: |          
-            EVENT="${{ github.event.workflow_run.name }}"
-            SHA="${{ github.event.workflow_run.head_sha }}"
               
-            if [ -z "$SHA" ]; then
-              echo "Broken SHA. Exiting..."
-              exit 1
-
-               echo "1"
-            elif [ "$EVENT" = "Deploying Conduit backend" ]; then
+          EVENT="${{ github.event.workflow_run.name }}"
+          SHA="${{ github.event.workflow_run.head_sha }}"
               
+          if [ -z "$SHA" ]; then
+            echo "Broken SHA. Exiting..."
+            exit 1
+
+          echo "1"
+            elif [ "$EVENT" = "Deploying Conduit backend" ]; then   
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
-              git pull "$IMAGE"
+              docker pull "$IMAGE"
               docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
-              docker compose run ${{ vars.BACKEND_IMAGE_NAME }}
+              docker compose run -d ${{ vars.BACKEND_IMAGE_NAME }}
               echo "2"
             elif [ "$EVENT" = "Deploying Conduit frontend" ]; then
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.FRONTEND_IMAGE_NAME }}:$SHA"
-              git pull "$IMAGE"
+              docker pull "$IMAGE"
               docker rm -f ${{ vars.FRONTEND_IMAGE_NAME }} || true
-              docker compose run ${{ vars.FRONTEND_IMAGE_NAME }}
+              docker compose run -d ${{ vars.FRONTEND_IMAGE_NAME }}
               echo "3"  
             else
-              echo "Unsupportet event: $EVENT
+              echo "Unsupportet event: $EVENT"
             fi
