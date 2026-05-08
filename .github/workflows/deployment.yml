@@ -63,3 +63,4 @@ jobs:
 
             else
               echo "Unsupportet event: $EVENT
+          fi
