@@ -27,7 +27,7 @@ jobs:
           pwd
           if [ "$EVENT" = "push" ]; then
             echo "Deploying Conduit"
-            cd projects/conduit-practice
+            # cd projects/conduit-practice
             docker compose up -d
           fi
 
