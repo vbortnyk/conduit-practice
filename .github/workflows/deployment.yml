@@ -47,19 +47,20 @@ jobs:
               echo "Broken SHA. Exiting..."
               exit 1
 
+               echo "1
             elif [ "$EVENT" = "Deploying Conduit backend" ]; then
               
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
               git pull "$IMAGE"
               docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
               docker compose run ${{ vars.BACKEND_IMAGE_NAME }}
-
+              echo "2"
             elif [ "$EVENT" = "Deploying Conduit frontend" ]; then
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.FRONTEND_IMAGE_NAME }}:$SHA"
               git pull "$IMAGE"
               docker rm -f ${{ vars.FRONTEND_IMAGE_NAME }} || true
               docker compose run ${{ vars.FRONTEND_IMAGE_NAME }}
-
+              echo "3"  
             else
               echo "Unsupportet event: $EVENT
             fi
