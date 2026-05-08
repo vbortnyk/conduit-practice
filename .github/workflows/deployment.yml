@@ -22,7 +22,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Deploy all
         run: |
           echo "Detecting event type"
@@ -31,6 +31,7 @@ jobs:
           ls -la
           if [ "$EVENT" = "push" ]; then
             echo "Building Conduit and pushing to GHCR"
+            git submodule update --init --recursive
             docker compose build
             docker compose push
           else
