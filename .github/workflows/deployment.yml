@@ -16,6 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with: 
+          registry: ghcr.io
+          username: ${{ vars.GH_USERNAME }}
+          password: ${{ secrets.GH_PAT }} 
+          
       - name: Deploy
         run: |
           EVENT="${{ github.event_name }}"
