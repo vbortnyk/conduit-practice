@@ -20,7 +20,7 @@ jobs:
         run: |
           EVENT="${{ github.event_name }}"
           if [ "$EVENT" = "push" ]; then 
-            echo "Full build and deploy
+            echo "Full build and deploy"
             git submodule update --init --recursive 
             docker compose build
             docker compose push
