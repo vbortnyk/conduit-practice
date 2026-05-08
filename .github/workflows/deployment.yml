@@ -31,7 +31,8 @@ jobs:
             docker compose push
           else
             echo "Full redeploy not needed"
-            
+          fi
+
       - name: Deploy separate services
         run: |
           if 
