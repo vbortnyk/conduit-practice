@@ -20,17 +20,20 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_VM_KEY }}
 
-      - name: Deploy
+      - name: Deploy all
         run: |
           echo "Detecting event type"
           EVENT="${{ github.event_name }}"
           pwd
           if [ "$EVENT" = "push" ]; then
-            echo "Deploying Conduit"
-            # cd projects/conduit-practice
-            docker compose up -d
-          fi
-
+            echo "Building Conduit and pushing to GHCR"
+            docker compose build
+            docker compose push
+          else
+            echo "Full redeploy not needed"
+            
+      - name: Deploy separate services
+        run: |
           if 
             EVENT="${{ github.event.workflow_run.name }}"
             SHA="${{ github.event.workflow_run.head_sha }}"
@@ -40,6 +43,7 @@ jobs:
               exit 1
 
             elif [ "$EVENT" = "Deploying Conduit backend" ]; then
+              
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
               git pull "$IMAGE"
               docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
