@@ -20,6 +20,9 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_VM_KEY }}
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Deploy all
         run: |
           echo "Detecting event type"
@@ -31,7 +34,7 @@ jobs:
             docker compose build
             docker compose push
           else
-            echo "Full redeploy not needed"
+            echo "Full deploy not needed"
           fi
 
       - name: Deploy separate services
