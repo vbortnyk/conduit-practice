@@ -47,7 +47,7 @@ jobs:
               echo "Broken SHA. Exiting..."
               exit 1
 
-               echo "1
+               echo "1"
             elif [ "$EVENT" = "Deploying Conduit backend" ]; then
               
               IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
