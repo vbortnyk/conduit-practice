@@ -53,6 +53,7 @@ jobs:
               -u "${{ vars.GH_USERNAME }}" \
               --password-stdin
 
+            cd projects/conduit-container
             docker compose pull
             docker compose up -d  
 
