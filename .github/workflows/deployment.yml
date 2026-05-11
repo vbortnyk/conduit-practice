@@ -24,21 +24,17 @@ jobs:
       #     username: ${{ vars.GH_USERNAME }}
       #     password: ${{ secrets.GH_PAT }} 
 
-      - name: Build and push all to GHCR
-          EVENT="${{ github.event_name }}"
-          if [ "$EVENT" = "push" ]        
-        run: |
-          EVENT="${{ github.event_name }}"
-          if [ "$EVENT" = "push" ]; then 
-            echo "Full build and push to GHCR"
-            git submodule update --init --recursive 
-            docker compose build
-            docker compose push
-          fi
+      # - name: Build and push all to GHCR        
+      #   run: |
+      #     EVENT="${{ github.event_name }}"
+      #     if [ "$EVENT" = "push" ]; then 
+      #       echo "Full build and push to GHCR"
+      #       git submodule update --init --recursive 
+      #       docker compose build
+      #       docker compose push
+      #     fi
           
       - name: Deploy all
-          EVENT="${{ github.event_name }}"
-          if [ "$EVENT" = "push" ] 
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ vars.VPS_HOST }}
@@ -53,30 +49,30 @@ jobs:
             docker compose pull
             docker compose up -d 
 
-      - name: Deploy service
-          EVENT=${{ github.event_name }}
-          if [ $EVENT="Deploy and push"* ]
-        run: |          
-          EVENT="${{ github.event.workflow_run.name }}"
-          SHA="${{ github.event.workflow_run.head_sha }}"
+      # - name: Deploy service
+      #     EVENT=${{ github.event_name }}
+      #     if [ $EVENT="Deploy and push"* ]
+      #   run: |          
+      #     EVENT="${{ github.event.workflow_run.name }}"
+      #     SHA="${{ github.event.workflow_run.head_sha }}"
               
-          if [ -z "$SHA" ]; then
-            echo "Broken SHA. Exiting..."
-            exit 1
+      #     if [ -z "$SHA" ]; then
+      #       echo "Broken SHA. Exiting..."
+      #       exit 1
 
-          echo "1"
-            elif [ "$EVENT" = "Deploying Conduit backend" ]; then   
-              IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
-              docker pull "$IMAGE"
-              docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
-              docker compose run -d ${{ vars.BACKEND_IMAGE_NAME }}
-              echo "2"
-            elif [ "$EVENT" = "Deploying Conduit frontend" ]; then
-              IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.FRONTEND_IMAGE_NAME }}:$SHA"
-              docker pull "$IMAGE"
-              docker rm -f ${{ vars.FRONTEND_IMAGE_NAME }} || true
-              docker compose run -d ${{ vars.FRONTEND_IMAGE_NAME }}
-              echo "3"  
-            else
-              echo "Unsupportet event: $EVENT"
-            fi
+      #     echo "1"
+      #       elif [ "$EVENT" = "Deploying Conduit backend" ]; then   
+      #         IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.BACKEND_IMAGE_NAME }}:$SHA"
+      #         docker pull "$IMAGE"
+      #         docker rm -f ${{ vars.BACKEND_IMAGE_NAME }} || true
+      #         docker compose run -d ${{ vars.BACKEND_IMAGE_NAME }}
+      #         echo "2"
+      #       elif [ "$EVENT" = "Deploying Conduit frontend" ]; then
+      #         IMAGE="ghcr.io/${{ vars.GH_USERNAME }}/${{ vars.FRONTEND_IMAGE_NAME }}:$SHA"
+      #         docker pull "$IMAGE"
+      #         docker rm -f ${{ vars.FRONTEND_IMAGE_NAME }} || true
+      #         docker compose run -d ${{ vars.FRONTEND_IMAGE_NAME }}
+      #         echo "3"  
+      #       else
+      #         echo "Unsupportet event: $EVENT"
+      #       fi
