@@ -14,8 +14,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      # - name: Checkout
+      #   uses: actions/checkout@v4
 
       - name: Login to GHCR
         uses: docker/login-action@v4
@@ -27,7 +27,7 @@ jobs:
       - name: Build and push all to GHCR        
         run: |
           echo "Full build and push to GHCR"
-          git submodule update --init --recursive 
+          # git submodule update --init --recursive 
           docker compose build
           docker compose push
           
