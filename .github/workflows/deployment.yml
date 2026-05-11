@@ -24,6 +24,26 @@ jobs:
           username: ${{ vars.GH_USERNAME }}
           password: ${{ secrets.GH_PAT }} 
 
+      - name: test
+        env:
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          ALLOWED_HOSTS: ${{ vars.ALLOWED_HOSTS }}
+        run: |
+          EVENT="${{ github.event_name }}"
+          if [ "$EVENT" = "push" ]; then 
+            echo "Full build and deploy"
+            git submodule update --init --recursive 
+            docker compose build
+            docker compose push
+            docker compose up -d
+
+            exit 0
+          else
+            echo "Full deploy not needed"
+          fi: 
+
       - name: Deploy
         run: |
           EVENT="${{ github.event_name }}"
