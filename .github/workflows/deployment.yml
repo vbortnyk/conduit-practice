@@ -17,32 +17,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login to GHCR
-        uses: docker/login-action@v4
-        with: 
-          registry: ghcr.io
-          username: ${{ vars.GH_USERNAME }}
-          password: ${{ secrets.GH_PAT }} 
+      # - name: Login to GHCR
+      #   uses: docker/login-action@v4
+      #   with: 
+      #     registry: ghcr.io
+      #     username: ${{ vars.GH_USERNAME }}
+      #     password: ${{ secrets.GH_PAT }} 
 
-      - name: Deploy all
-        env:
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-          ALLOWED_HOSTS: ${{ vars.ALLOWED_HOSTS }}
+      - name: Build and push all to GHCR
+          EVENT="${{ github.event_name }}"
+          if [ "$EVENT" = "push" ]        
         run: |
           EVENT="${{ github.event_name }}"
           if [ "$EVENT" = "push" ]; then 
-            echo "Full build and deploy"
+            echo "Full build and push to GHCR"
             git submodule update --init --recursive 
             docker compose build
             docker compose push
-            exit 0
-          else
-            echo "Full deploy not needed"
           fi
           
-      - name: Deploy to VPS
+      - name: Deploy all
+          EVENT="${{ github.event_name }}"
+          if [ "$EVENT" = "push" ] 
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ vars.VPS_HOST }}
@@ -56,9 +52,10 @@ jobs:
             cd projects/conduit-container
             docker compose pull
             docker compose up -d 
-            exit 0 
 
-      - name: Deploy
+      - name: Deploy service
+          EVENT=${{ github.event_name }}
+          if [ $EVENT="Deploy and push"* ]
         run: |          
           EVENT="${{ github.event.workflow_run.name }}"
           SHA="${{ github.event.workflow_run.head_sha }}"
