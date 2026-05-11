@@ -55,7 +55,8 @@ jobs:
 
             cd projects/conduit-container
             docker compose pull
-            docker compose up -d  
+            docker compose up -d 
+            exit 0 
 
       - name: Deploy
         run: |          
