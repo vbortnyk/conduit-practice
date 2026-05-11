@@ -32,6 +32,7 @@ jobs:
             git submodule update --init --recursive 
             docker compose build
             docker compose push
+            docker compose up -d
 
             exit 0
           else
