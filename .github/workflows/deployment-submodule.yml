@@ -6,7 +6,7 @@ on:
       image:
         required: true
         type: string
-      sha:
+      username:
         required: true
         type: string
 
