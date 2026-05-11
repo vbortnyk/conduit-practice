@@ -24,7 +24,7 @@ jobs:
           username: ${{ vars.GH_USERNAME }}
           password: ${{ secrets.GH_PAT }} 
 
-      - name: test
+      - name: Deploy all
         env:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
@@ -37,28 +37,24 @@ jobs:
             git submodule update --init --recursive 
             docker compose build
             docker compose push
-            docker compose up -d
-
             exit 0
           else
             echo "Full deploy not needed"
           fi
+          
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY}}
+          script: |
+            cd /app
+            docker compose pull
+            docker compose up -d   
 
       - name: Deploy
-        run: |
-          EVENT="${{ github.event_name }}"
-          if [ "$EVENT" = "push" ]; then 
-            echo "Full build and deploy"
-            git submodule update --init --recursive 
-            docker compose build
-            docker compose push
-            docker compose up -d
-
-            exit 0
-          else
-            echo "Full deploy not needed"
-          fi
-              
+        run: |          
           EVENT="${{ github.event.workflow_run.name }}"
           SHA="${{ github.event.workflow_run.head_sha }}"
               
