@@ -3,7 +3,7 @@ name: Deploy
 on: 
   workflow_run:
     workflows:
-      - Build and push Conduit backened
+      - Build and push Conduit backend
       - Build and push Conduit frontend 
     types: [completed]   
   push:
