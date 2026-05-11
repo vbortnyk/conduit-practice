@@ -42,7 +42,7 @@ jobs:
             exit 0
           else
             echo "Full deploy not needed"
-          fi: 
+          fi
 
       - name: Deploy
         run: |
