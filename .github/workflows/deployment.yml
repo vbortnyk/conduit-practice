@@ -24,17 +24,14 @@ jobs:
       #     username: ${{ vars.GH_USERNAME }}
       #     password: ${{ secrets.GH_PAT }} 
 
-      # - name: Build and push all to GHCR        
-      #   run: |
-      #     EVENT="${{ github.event_name }}"
-      #     if [ "$EVENT" = "push" ]; then 
-      #       echo "Full build and push to GHCR"
-      #       git submodule update --init --recursive 
-      #       docker compose build
-      #       docker compose push
-      #     fi
+      - name: Build and push all to GHCR        
+        run: |
+          echo "Full build and push to GHCR"
+          git submodule update --init --recursive 
+          docker compose build
+          docker compose push
           
-      - name: Deploy all
+      - name: Deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ vars.VPS_HOST }}
@@ -49,9 +46,7 @@ jobs:
             docker compose pull
             docker compose up -d 
 
-      # - name: Deploy service
-      #     EVENT=${{ github.event_name }}
-      #     if [ $EVENT="Deploy and push"* ]
+      # - name: Deploy
       #   run: |          
       #     EVENT="${{ github.event.workflow_run.name }}"
       #     SHA="${{ github.event.workflow_run.head_sha }}"
