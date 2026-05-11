@@ -44,7 +44,7 @@ jobs:
 
             cd projects/conduit-container
             docker compose pull
-            docker compose up -d 
+            docker compose up -d --force-recreate
 
       # - name: Deploy
       #   run: |          
