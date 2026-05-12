@@ -34,9 +34,6 @@ jobs:
               -u "${{ vars.GH_USERNAME }}" \
               --password-stdin
 
-      - name: pull-and-deploy
-        run: |
-            pwd
-            ls -la
+            cd projects/conduit-container
             TAG=${{ inputs.tag }} docker compose pull ${{ inputs.service }}
             TAG=${{ inputs.tag }} docker compose up -d --no-deps --force-recreate ${{ inputs.service }}
