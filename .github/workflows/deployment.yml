@@ -8,7 +8,7 @@ on:
       - '.github/workflows/deployment.yml'
 
 jobs:
-  deploy:
+  push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,6 +28,9 @@ jobs:
           docker compose build
           docker compose push
           
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
