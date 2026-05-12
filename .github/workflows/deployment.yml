@@ -25,8 +25,8 @@ jobs:
         run: |
           echo "Full build and push to GHCR"
           git submodule update --init --recursive 
-          docker compose build
-          docker compose push
+          TAG=${{ github.sha }} docker compose build
+          TAG=${{ github.sha }} docker compose push
           
   deploy:
     runs-on: ubuntu-latest
@@ -43,5 +43,5 @@ jobs:
               --password-stdin
 
             cd projects/conduit-container
-            docker compose pull
-            docker compose up -d --force-recreate
+            TAG=${{ github.sha }} docker compose pull
+            TAG=${{ github.sha }} docker compose up -d --force-recreate

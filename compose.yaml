@@ -6,7 +6,7 @@ services:
     ports:
       - ${FRONTEND_PORT}:80
     container_name: conduit-frontend-practice
-    image: ghcr.io/vbortnyk/conduit-frontend-practice:latest
+    image: ghcr.io/vbortnyk/conduit-frontend-practice:${TAG}
     depends_on:
       backend:
         condition: service_healthy
@@ -17,7 +17,7 @@ services:
       context: conduit-backend-practice
       dockerfile: Dockerfile
     container_name: conduit-backend-practice
-    image: ghcr.io/vbortnyk/conduit-backend-practice:latest
+    image: ghcr.io/vbortnyk/conduit-backend-practice:${TAG}
     expose:
       - "${BACKEND_PORT}"
     healthcheck:
