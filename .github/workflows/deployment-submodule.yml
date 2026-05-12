@@ -35,6 +35,6 @@ jobs:
       
       - name: Pull image
         run: |
-          cd projects/conduit-practice
+
           TAG=${{ inputs.tag }} docker compose pull ${{ inputs.service }}
           TAG=${{ inputs.tag }} docker compose up -d --no-deps --force-recreate ${{ inputs.service }}
