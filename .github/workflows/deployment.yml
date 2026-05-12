@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-    # paths-ignore:
-    #   - 'conduit-backend-practice/**'
-    #   - 'conduit-ftontend-practice/**'
-    #   - 'vbortnyk/conduit-practice/blob/main/.github/workflows/deployment-submodule.yml'
     paths:
       - '.github/**'
       - 'compose.yml'
