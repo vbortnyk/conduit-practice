@@ -3,18 +3,25 @@ name: Deployment submodule
 on: 
   workflow_call:
     inputs:
-      image:
-        required: true
-        type: string
+      # image:
+      #   required: true
+      #   type: string
       tag:
         required: true
         type: string
+
+      service:
+        required: true
+        type: string
+
       username:
         required: true
         type: string     
     secrets:
       GH_PAT:
         required: true
+    
+
 
 jobs:
   deploy:
@@ -29,6 +36,5 @@ jobs:
       
       - name: Pull image
         run: |
-          docker pull ${{ inputs.image }}:${{ inputs.tag }}
-          docker rm -f ${{ inputs.image }} || true
-          docker compose run -d ${{ inputs.image }}:${{ inputs.tag }}
+          TAG=${{ inputs.tag }} docker compose pull ${{ inputs.service }}
+          TAG=${{ inputs.tag }} docker compose up -d --no-deps --force-recreate ${{ inputs.service }}
