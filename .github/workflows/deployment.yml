@@ -8,7 +8,7 @@ on:
       - '.github/workflows/deployment.yml'
 
 jobs:
-  push:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,6 +29,7 @@ jobs:
           TAG=${{ github.sha }} docker compose push
           
   deploy:
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
