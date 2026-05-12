@@ -9,6 +9,11 @@ on:
       username:
         required: true
         type: string
+    secrets:
+      GH_PAT:
+        required: true
+      GH_USERNAME:
+        required: true
 
 jobs:
   deploy:
