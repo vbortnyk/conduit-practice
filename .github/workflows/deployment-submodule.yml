@@ -6,9 +6,12 @@ on:
       image:
         required: true
         type: string
-      username:
+      tag:
         required: true
         type: string
+      username:
+        required: true
+        type: string     
     secrets:
       GH_PAT:
         required: true
