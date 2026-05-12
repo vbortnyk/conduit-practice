@@ -29,7 +29,6 @@ jobs:
       
       - name: Pull image
         run: |
-          
           docker pull ${{ inputs.image }}:${{ inputs.tag }}
           docker rm -f ${{ inputs.image }} || true
-          docker compose run -d ${{ inputs.image }}
+          docker compose run -d ${{ inputs.image }}:${{ inputs.tag }}
