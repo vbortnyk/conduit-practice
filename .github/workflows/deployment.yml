@@ -1,17 +1,16 @@
 name: Deploy
 
-on: 
-  # workflow_run:
-    # workflows:
-    #   - Build and push Conduit backend
-    #   - Build and push Conduit frontend 
-    # types: [completed]   
+on:  
   push:
     branches:
       - main
-    paths-ignore:
-      - 'conduit-backend-practice/**'
-      - 'conduit-ftontend-practice/**'
+    # paths-ignore:
+    #   - 'conduit-backend-practice/**'
+    #   - 'conduit-ftontend-practice/**'
+    #   - 'vbortnyk/conduit-practice/blob/main/.github/workflows/deployment-submodule.yml'
+    paths:
+      - '.github/**'
+      - 'compose.yml'
 
 jobs:
   deploy:
