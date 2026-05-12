@@ -37,5 +37,7 @@ jobs:
       - name: pull-and-deploy
         run: |
             cd projects/conduit-practice
+            pwd
+            ls -la
             TAG=${{ inputs.tag }} docker compose pull ${{ inputs.service }}
             TAG=${{ inputs.tag }} docker compose up -d --no-deps --force-recreate ${{ inputs.service }}
