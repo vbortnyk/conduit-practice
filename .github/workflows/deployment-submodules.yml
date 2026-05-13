@@ -19,9 +19,9 @@ on:
       #   required: true
       #   type: string
         
-    secrets:
-      GH_PAT:
-        required: true
+    # secrets:
+    #   GH_PAT:
+    #     required: true
     
 
 jobs:
