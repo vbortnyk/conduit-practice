@@ -40,5 +40,6 @@ jobs:
               --password-stdin
 
             cd projects/conduit-container
+            pwd
             TAG=${{ inputs.tag }} docker compose pull ${{ inputs.service }}
             TAG=${{ inputs.tag }} docker compose up -d --no-deps --force-recreate ${{ inputs.service }}
