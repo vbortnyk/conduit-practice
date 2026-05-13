@@ -38,5 +38,7 @@ jobs:
             echo "${{ secrets.GH_PAT }}" | docker login ghcr.io \
               -u "${{ vars.GH_USERNAME }}" \
               --password-stdin
+
+            cd projects/conduit-container
             TAG=${{ inputs.tag }} docker compose pull ${{ inputs.service }}
             TAG=${{ inputs.tag }} docker compose up -d --no-deps --force-recreate ${{ inputs.service }}
