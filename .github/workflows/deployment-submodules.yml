@@ -47,6 +47,7 @@ jobs:
           tags: ghcr.io/${{ vars.GH_USERNAME }}/${{ inputs.service }}:${{ github.sha }}
 
   deploy:
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Login to VPS
