@@ -11,9 +11,14 @@ on:
         required: true
         type: string
 
-      username:
+      gh-username:
         required: true
-        type: string     
+        type: string  
+        
+      vps-username:
+        required: true
+        type: string
+        
     secrets:
       GH_PAT:
         required: true
