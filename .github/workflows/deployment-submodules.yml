@@ -19,6 +19,10 @@ on:
         required: true
         type: string
 
+      vps-host:
+        required: true
+        type: string
+
     secrets:
       GH_PAT:
         required: true
