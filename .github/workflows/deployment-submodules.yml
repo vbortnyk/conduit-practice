@@ -39,7 +39,7 @@ jobs:
               -u "${{ vars.GH_USERNAME }}" \
               --password-stdin
 
-            cd projects/conduit-container
+            cd projects/conduit-container-practice
             pwd
             TAG=${{ inputs.tag }} docker compose pull ${{ inputs.service }}
             TAG=${{ inputs.tag }} docker compose up -d --no-deps --force-recreate ${{ inputs.service }}
