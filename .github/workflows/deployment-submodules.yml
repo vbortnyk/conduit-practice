@@ -54,7 +54,7 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ inputs.VPS_HOST }}
-          username: ${{ inputs.VPS_USEVR }}
+          username: ${{ inputs.VPS_USEVRNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             echo "${{ secrets.GH_PAT }}" | docker login ghcr.io \
