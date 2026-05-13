@@ -9,20 +9,7 @@ on:
 
       service:
         required: true
-        type: string
-
-      # gh-username:
-      #   required: true
-      #   type: string  
-        
-      # vps-username:
-      #   required: true
-      #   type: string
-        
-    # secrets:
-    #   GH_PAT:
-    #     required: true
-    
+        type: string    
 
 jobs:
   deploy:
