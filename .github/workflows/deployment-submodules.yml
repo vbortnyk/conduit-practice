@@ -42,7 +42,7 @@ jobs:
       - name: Build and push to GHCR
         uses: docker/build-push-action@v7
         with:
-          context: ./${{ inputs.service }}
+          context: .
           push: true
           tags: ghcr.io/${{ vars.GH_USERNAME }}/${{ inputs.service }}:${{ github.sha }}
 
