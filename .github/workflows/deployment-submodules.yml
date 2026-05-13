@@ -11,9 +11,9 @@ on:
         required: true
         type: string
 
-      gh-username:
-        required: true
-        type: string  
+      # gh-username:
+      #   required: true
+      #   type: string  
         
       # vps-username:
       #   required: true
